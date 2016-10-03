@@ -1,0 +1,111 @@
+---
+title: "Statistical inference course project"
+author: "João Pedro Schmitt"
+date: "3 de outubro de 2016"
+output: html_document
+---
+
+```{r}
+# Randomness parameter
+set.seed(32016)
+
+# Exponential distribution paramenters
+lambda <- 0.2
+exp_n <- 40
+
+# Exponential distribution simulation
+exp_sim_mean <- numeric()
+exp_sim_sd <- numeric()
+for(i in 1:10000) {
+  simulation <- rexp(exp_n, lambda)
+  exp_sim_mean <- c(exp_sim_mean, mean(simulation))
+  exp_sim_sd <- c(exp_sim_sd, sd(simulation))
+}
+```
+
+### Question 1
+
+Show the sample mean and compare it to the theoretical mean of the distribution with the means.
+
+Comparing the theorical mean: 
+```{r} 
+exp_theor_mean <- 1/lambda
+exp_theor_mean
+``` 
+With the mean of the simulations:
+```{r}
+exp_sim_mean_est <- mean(exp_sim_mean)
+exp_sim_mean_est
+```
+The mean difference between the simulated and theorical is:
+```{r}
+abs(exp_theor_mean - exp_sim_mean_est)
+```
+Below follow the historgram of the distribution:
+```{r}
+hist(exp_sim_mean, 
+     main = "Exponential distribuition with lambda equals to 0.2.", 
+     xlab = "Mean", 
+     col = "tomato")
+abline(v = exp_sim_mean_est, 
+       col = "yellow", 
+       lwd = 4)
+abline(v = exp_theor_mean, 
+       col = "blue", 
+       lwd = 2)
+legend("topright", 
+       legend = c("Sample mean", "Theorical mean"), 
+       col = c("yellow","blue"), 
+       lwd = c(2,2))
+```
+
+### Question 2
+
+Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
+
+The standard deviation of simulations is equals to:
+```{r}
+exp_sim_sd_est <- mean(exp_sim_sd)/sqrt(exp_n)
+exp_sim_sd_est
+```
+The standard deviation of theorical is equals to:
+```{r}
+exp_theor_sd <- 1/lambda/sqrt(exp_n)
+exp_theor_sd
+```
+The standard deviantion of the difference between the simulated and theorical is:
+```{r}
+abs(exp_theor_sd - exp_sim_sd_est)
+```
+  
+  
+The variance of the distribution simulation is:
+```{r}
+exp_sim_var_est <- exp_sim_sd_est^2
+exp_sim_var_est
+```
+The variance of the distribution theorical is:
+```{r}
+exp_theor_var <- exp_theor_sd^2
+exp_theor_var
+```
+The variance of the difference between the simulated and theorical is:
+```{r}
+abs(exp_theor_var - exp_sim_var_est)
+```
+
+### Question 3
+
+Show that the distribution is approximately normal.
+
+The follow code demonstra the normal distribuition:
+```{r}
+hist(exp_sim_mean, 
+     main = "Exponential distribuition with lambda equals to 0.2.", 
+     xlab = "Mean", 
+     col = "tomato", 
+     prob = T)
+lines(density(exp_sim_mean), 
+      col="green", 
+      lwd = 2)
+```

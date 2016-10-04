@@ -1,6 +1,6 @@
 ---
 title: "Statistical inference course project"
-author: "Jo√£o Pedro Schmitt"
+author: "Jo„o Pedro Schmitt"
 date: "3 de outubro de 2016"
 output: html_document
 ---
@@ -14,13 +14,20 @@ lambda <- 0.2
 exp_n <- 40
 
 # Exponential distribution simulation
+exp_sim_raw <- numeric()
 exp_sim_mean <- numeric()
 exp_sim_sd <- numeric()
 for(i in 1:10000) {
   simulation <- rexp(exp_n, lambda)
+  exp_sim_raw <- c(exp_sim_raw, simulation)
   exp_sim_mean <- c(exp_sim_mean, mean(simulation))
   exp_sim_sd <- c(exp_sim_sd, sd(simulation))
 }
+```
+
+A little exploratory summary of the simulated distribution
+```{r}
+summary(exp_sim_raw)
 ```
 
 ### Question 1

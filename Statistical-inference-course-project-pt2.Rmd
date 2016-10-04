@@ -6,19 +6,17 @@ output: html_document
 ---
 
 For this assigment was used the dataset ToothGrowth.
-
-```{r}
-data(ToothGrowth)
-str(ToothGrowth)
-```
-
 The CodeBook is:
 1. len - numeric - Tooth length
 2. supp - factor - Supplement type (VC or OJ)
 3. dose - numeric - Dose in milligrams/day
 
+### 1. Load the ToothGrowth data and perform some basic exploratory data analyses
+
 A graph demonstring the relationship of the variables:
-```{r}
+```{r message=FALSE}
+data(ToothGrowth)
+
 library(ggplot2)
 library(dplyr)
 
@@ -36,5 +34,55 @@ g <- ggplot(data = filtered,
 g <- g + geom_bar(stat = "identity", 
     aes(fill=Supplement), 
     position=position_dodge())
-g + labs(title = "ToothGrowth by supplement")
+g <- g + labs(title = "ToothGrowth by supplement")
+print(g)
+```
+
+### 2. Provide a basic summary of the data.
+
+A little summary of the variables:
+
+```{r}
+summary(ToothGrowth)
+```
+
+### 3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.
+
+
+#### Classifing by supplement
+
+The confidence intervals and the p-value of the hypothesis test by supplement are:
+
+```{r}
+t.test(len ~ supp, data = ToothGrowth, paired = F, var.eq = F)
+```
+
+For a confidence interval of 5% the p-value was 6%, so the difference by supplement is not significant to consider one supplement instead of the other.
+
+#### Classifing by dose of 0.5 and 1.0
+
+The confidence intervals and the p-value of the hypothesis test by dose of 0.5 and 1.0 are:
+
+```{r}
+filtered <- ToothGrowth %>% filter(dose %in% c(0.5,1.0))
+t.test(len ~ dose, data = filtered, paired = F, var.eq = F)
+```
+
+
+#### Classifing by dose of 0.5 and 2.0
+
+The confidence intervals and the p-value of the hypothesis test by dose of 0.5 and 1.0 are:
+
+```{r}
+filtered <- ToothGrowth %>% filter(dose %in% c(0.5,2.0))
+t.test(len ~ dose, data = filtered, paired = F, var.eq = F)
+```
+
+#### Classifing by dose of 1.0 and 2.0
+
+The confidence intervals and the p-value of the hypothesis test by dose of 0.5 and 1.0 are:
+
+```{r}
+filtered <- ToothGrowth %>% filter(dose %in% c(1.0,2.0))
+t.test(len ~ dose, data = filtered, paired = F, var.eq = F)
 ```

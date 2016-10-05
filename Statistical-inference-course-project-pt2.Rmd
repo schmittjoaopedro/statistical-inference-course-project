@@ -13,7 +13,7 @@ The CodeBook is:
 
 ### 1. Load the ToothGrowth data and perform some basic exploratory data analyses
 
-A graph demonstring the relationship of the variables:
+A graph demonstrating the relationship of the variables:
 ```{r message=FALSE}
 data(ToothGrowth)
 
@@ -22,7 +22,7 @@ library(dplyr)
 
 filtered <- ToothGrowth %>% 
     group_by(supp, dose) %>% 
-    summarise_each(funs(sum(len))) %>% 
+    summarise_each(funs(mean(len))) %>% 
     as.data.frame()
 
 filtered$dose <- as.factor(filtered$dose)
@@ -38,9 +38,11 @@ g <- g + labs(title = "ToothGrowth by supplement")
 print(g)
 ```
 
+We can see that have a difference in growth of tooth relations with the supplement or dose.
+
 ### 2. Provide a basic summary of the data.
 
-A little summary of the variables:
+A little summary of the variables data:
 
 ```{r}
 summary(ToothGrowth)
@@ -48,7 +50,7 @@ summary(ToothGrowth)
 
 ### 3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.
 
-To calculate the data we use the follow function:
+To calculate the confidence intervals and the p-value, we use the follow functions:
 
 ```{r}
 calculateIntervals <- function(g1, g2) {
@@ -109,32 +111,30 @@ calculatePValue <- function(g1, g2) {
 
 #### Classifing by supplement
 
-The confidence intervals are:
+The confidence intervals for growth with supplements are:
 ```{r}
 g1 <- ToothGrowth$len[ToothGrowth$supp == "OJ"]
 g2 <- ToothGrowth$len[ToothGrowth$supp == "VC"]
 calculateIntervals(g1, g2)
 ```
 
-The p-value is:
+And the p-value is:
 ```{r}
 g1 <- ToothGrowth$len[ToothGrowth$supp == "OJ"]
 g2 <- ToothGrowth$len[ToothGrowth$supp == "VC"]
 calculatePValue(g1, g2)
 ```
 
-For a confidence interval of 5% the p-value was 6%, so the difference by supplement is not significant to consider one supplement instead of the other.
-
 #### Classifing by dose of 0.5 and 1.0
 
-The confidence intervals are:
+The confidence intervals for dose with 0.5 and 1.0 are:
 ```{r}
 g1 <- ToothGrowth$len[ToothGrowth$dose == 0.5]
 g2 <- ToothGrowth$len[ToothGrowth$dose == 1.0]
 calculateIntervals(g1, g2)
 ```
 
-The p-value is:
+And the p-value is:
 ```{r}
 g1 <- ToothGrowth$len[ToothGrowth$dose == 0.5]
 g2 <- ToothGrowth$len[ToothGrowth$dose == 1.0]
@@ -144,14 +144,14 @@ calculatePValue(g1, g2)
 
 #### Classifing by dose of 0.5 and 2.0
 
-The confidence intervals are:
+The confidence intervals for dose with 0.5 and 2.0 are:
 ```{r}
 g1 <- ToothGrowth$len[ToothGrowth$dose == 0.5]
 g2 <- ToothGrowth$len[ToothGrowth$dose == 2.0]
 calculateIntervals(g1, g2)
 ```
 
-The p-value is:
+And the p-value is:
 ```{r}
 g1 <- ToothGrowth$len[ToothGrowth$dose == 0.5]
 g2 <- ToothGrowth$len[ToothGrowth$dose == 2.0]
@@ -160,16 +160,23 @@ calculatePValue(g1, g2)
 
 #### Classifing by dose of 1.0 and 2.0
 
-The confidence intervals are:
+The confidence intervals for dose with 1.0 and 2.0 are:
 ```{r}
 g1 <- ToothGrowth$len[ToothGrowth$dose == 1.0]
 g2 <- ToothGrowth$len[ToothGrowth$dose == 2.0]
 calculateIntervals(g1, g2)
 ```
 
-The p-value is:
+And the p-value is:
 ```{r}
 g1 <- ToothGrowth$len[ToothGrowth$dose == 1.0]
 g2 <- ToothGrowth$len[ToothGrowth$dose == 2.0]
 calculatePValue(g1, g2)
 ```
+
+
+### Conclusions
+
+For supplement the confidence interval of 5% the p-value was 6%, so the difference by supplement is not significant to consider one supplement instead of the other.
+
+For dose, the p-values for dose differences are most significative and the dose should be considered. When we increase the dose, the teeth has greater growth rates.

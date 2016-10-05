@@ -48,41 +48,128 @@ summary(ToothGrowth)
 
 ### 3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.
 
+To calculate the data we use the follow function:
+
+```{r}
+calculateIntervals <- function(g1, g2) {
+    
+    # Get the mean
+    g1m <- mean(g1)
+    g2m <- mean(g2)
+    
+    # Get the standard deviation
+    g1s <- sd(g1)
+    g2s <- sd(g2)
+    
+    # Get the number of each collection
+    g1n <- length(g1)
+    g2n <- length(g2)
+    
+    # Get the degrees of freedom
+    df <- (g1s^2/g1n + g2s^2/g2n)^2 / ((g1s^2/g1n)^2/(g1n-1) + (g2s^2/g2n)^2/(g2n-1))
+    
+    # Calculate the confidence interval for 5% of both sides using T Student's
+    int <- (g1m - g2m) + c(-1,1) * qt(.975, df) * sqrt(g1s^2/g1n + g2s^2/g2n)
+    
+    return(int)
+}
+
+calculatePValue <- function(g1, g2) {
+    
+    # Order to get from the smaller to greater
+    if(mean(g1) > mean(g2)) {
+        aux <- g1
+        g1 <- g2
+        g2 <- aux
+    }
+        
+    # Get the mean
+    g1m <- mean(g1)
+    g2m <- mean(g2)
+    
+    # Get the standard deviation
+    g1s <- sd(g1)
+    g2s <- sd(g2)
+    
+    # Get the number of each collection
+    g1n <- length(g1)
+    g2n <- length(g2)
+    
+    # Get the degrees of freedom
+    df <- (g1s^2/g1n + g2s^2/g2n)^2 / ((g1s^2/g1n)^2/(g1n-1) + (g2s^2/g2n)^2/(g2n-1))
+    
+    # Get T statistic
+    t <- (g1m - g2m) / sqrt(g1s^2/g1n + g2s^2/g2n)
+    
+    # Return the p-value
+    return(2 * pt(t, df))
+    
+}
+```
 
 #### Classifing by supplement
 
-The confidence intervals and the p-value of the hypothesis test by supplement are:
-
+The confidence intervals are:
 ```{r}
-t.test(len ~ supp, data = ToothGrowth, paired = F, var.eq = F)
+g1 <- ToothGrowth$len[ToothGrowth$supp == "OJ"]
+g2 <- ToothGrowth$len[ToothGrowth$supp == "VC"]
+calculateIntervals(g1, g2)
+```
+
+The p-value is:
+```{r}
+g1 <- ToothGrowth$len[ToothGrowth$supp == "OJ"]
+g2 <- ToothGrowth$len[ToothGrowth$supp == "VC"]
+calculatePValue(g1, g2)
 ```
 
 For a confidence interval of 5% the p-value was 6%, so the difference by supplement is not significant to consider one supplement instead of the other.
 
 #### Classifing by dose of 0.5 and 1.0
 
-The confidence intervals and the p-value of the hypothesis test by dose of 0.5 and 1.0 are:
-
+The confidence intervals are:
 ```{r}
-filtered <- ToothGrowth %>% filter(dose %in% c(0.5,1.0))
-t.test(len ~ dose, data = filtered, paired = F, var.eq = F)
+g1 <- ToothGrowth$len[ToothGrowth$dose == 0.5]
+g2 <- ToothGrowth$len[ToothGrowth$dose == 1.0]
+calculateIntervals(g1, g2)
+```
+
+The p-value is:
+```{r}
+g1 <- ToothGrowth$len[ToothGrowth$dose == 0.5]
+g2 <- ToothGrowth$len[ToothGrowth$dose == 1.0]
+calculatePValue(g1, g2)
 ```
 
 
 #### Classifing by dose of 0.5 and 2.0
 
-The confidence intervals and the p-value of the hypothesis test by dose of 0.5 and 1.0 are:
-
+The confidence intervals are:
 ```{r}
-filtered <- ToothGrowth %>% filter(dose %in% c(0.5,2.0))
-t.test(len ~ dose, data = filtered, paired = F, var.eq = F)
+g1 <- ToothGrowth$len[ToothGrowth$dose == 0.5]
+g2 <- ToothGrowth$len[ToothGrowth$dose == 2.0]
+calculateIntervals(g1, g2)
+```
+
+The p-value is:
+```{r}
+g1 <- ToothGrowth$len[ToothGrowth$dose == 0.5]
+g2 <- ToothGrowth$len[ToothGrowth$dose == 2.0]
+calculatePValue(g1, g2)
 ```
 
 #### Classifing by dose of 1.0 and 2.0
 
-The confidence intervals and the p-value of the hypothesis test by dose of 0.5 and 1.0 are:
-
+The confidence intervals are:
 ```{r}
-filtered <- ToothGrowth %>% filter(dose %in% c(1.0,2.0))
-t.test(len ~ dose, data = filtered, paired = F, var.eq = F)
+g1 <- ToothGrowth$len[ToothGrowth$dose == 1.0]
+g2 <- ToothGrowth$len[ToothGrowth$dose == 2.0]
+calculateIntervals(g1, g2)
+```
+
+The p-value is:
+```{r}
+g1 <- ToothGrowth$len[ToothGrowth$dose == 1.0]
+g2 <- ToothGrowth$len[ToothGrowth$dose == 2.0]
+calculatePValue(g1, g2)
 ```
